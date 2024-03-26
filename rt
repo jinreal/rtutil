@@ -1,0 +1,40 @@
+bin="echo"
+params=("\"Invalid command.\"")
+epilogue=()
+
+if [[ "$1" == *.c ]]; then
+  bin="gcc"
+  params=("$1")
+  epilogue=("./a.out")
+elif [[ "$1" == *.cc ]]; then
+  bin="g++"
+  params=("$1")
+  epilogue=("./a.out")  
+elif [[ "$1" == *.go ]]; then
+  bin="go"
+  params=("run" "$1")
+elif [[ "$1" == *.js ]]; then
+  bin="node"
+  params=("$1")
+elif [[ "$1" == *.py ]]; then
+  bin="python"
+  params=("$1")
+fi
+
+# run command
+mainCmd="$bin"
+for el in "${params[@]}"; do
+    mainCmd+=" $el"
+done
+eval "$mainCmd"
+
+if [ ${#epilogue[@]} -eq 0 ]; then
+    exit
+fi
+
+# run epilogue
+epilogueCmd=""
+for el in "${epilogue[@]}"; do
+    epilogueCmd+="$el "
+done
+eval "$epilogueCmd"
